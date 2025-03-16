@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
+#include <vector>
 
 class Student{
     public:
@@ -31,31 +32,44 @@ class Student{
 };
 
 // golobal variables
-const int MAX_STUDENTS = 100;  // Maximum number of students
-Student students[MAX_STUDENTS];
-int studetCount = 0;
+vector<Student> students;
+
 void addStudent(){
-    if(studetCount < MAX_STUDENTS){
-        students[studetCount].CreateStudent();
-        studetCount ++;
-    }else{
-        cout << "Student list is full!" << endl;
-    }
+    Student newStudent;
+    newStudent.CreateStudent();
+    students.push_back(newStudent);
 }
 
 // Display Students
 void displayAllStudents(){
-    if(studetCount ==0){
-        cout<<"There is No studens Stored !"<<endl;
+    if(students.empty()){
+        cout << "No students stored!" << endl;
+        return;
     }
-    for(int i =0; i< studetCount; i ++){
-        students[i].DisplayStudents();
-        cout << "---------------------" << endl;
+    for (Student student : students) {
+        student.DisplayStudents();
     }
+}
+
+// Delete Students
+void DeleteStudent(){
+    Student deleteStudent;
+    cout << "Enter Roll Number of Student to Delete: ";
+    cin >> deleteStudent.rollNumber;
+    for(int i =0; i < students.size(); i++){
+        if(students[i].rollNumber == deleteStudent.rollNumber){
+            cout<<"Deleting Student: "<<students[i].name <<endl;
+            students.erase(students.begin() + i);
+            cout<<"Student Deleted Succesfully!\n";
+            return ;
+        }
+    }
+    cout << "Student with Roll Number " << deleteStudent.rollNumber << " not found!" << endl;
 }
 
 int main(){
     addStudent();
     displayAllStudents();
+    DeleteStudent();
     return 0;
 }
