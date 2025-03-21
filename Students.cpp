@@ -11,7 +11,8 @@ class Student{
 
     void CreateStudent(){
         cout<<"Enter Student Name"<<endl;
-        cin>>name;
+        cin.ignore();
+        getline(cin, name);
 
         cout<<"Enter Student Age"<<endl;
         cin>>age;
@@ -24,10 +25,11 @@ class Student{
     }
 
     void DisplayStudents() {
-        cout << "Student Name: " << name << endl;
-        cout << "Student Age: " << age << endl;
-        cout << "Student Roll Number: " << rollNumber << endl;
-        cout << "Student Class: " << Class << endl; // Add endl here
+        // cout << "Student Name: .\n" << name << "\n student age: \n"<< age <<
+        // "\n Student Roll Number: \n" << rollNumber <<"\n Student Class: \n"<<endl;
+
+        cout << ", Name: " << name << ", Roll Number: " << rollNumber 
+             << ", Age: " << age << ", Marks: " <<endl;
     }
 };
 
@@ -59,8 +61,16 @@ void DeleteStudent(){
     for(int i =0; i < students.size(); i++){
         if(students[i].rollNumber == deleteStudent.rollNumber){
             cout<<"Deleting Student: "<<students[i].name <<endl;
-            students.erase(students.begin() + i);
-            cout<<"Student Deleted Succesfully!\n";
+            // Ask for confirmation
+            char confirm;
+            cout<<"are you sure you want to delete the user !"<<endl;
+            cin>>confirm;
+            if(confirm = "y" || "Y" ){
+                students.erase(students.begin() + i);
+                cout<<"Student Deleted Succesfully!\n";
+            }else{
+                cout<<"deletion cancelled. \n";
+            }
             return ;
         }
     }
@@ -68,8 +78,20 @@ void DeleteStudent(){
 }
 
 int main(){
-    addStudent();
-    displayAllStudents();
-    DeleteStudent();
+    int choice;
+    while (true){
+    cout<<"\n1. Add Student\n2. Display All students\n3. Delete Students\n4. Exit\n";
+    cout<<"Enter a Choice";
+    cin>>choice;
+    if(choice == 1){
+        addStudent();
+    }else if(choice == 2){
+        displayAllStudents();
+    }else if(choice == 3){
+        DeleteStudent();
+    }else{
+        cout<<"Invalid Choice ! Try Again\n";
+    }
+    }
     return 0;
 }
