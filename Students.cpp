@@ -25,9 +25,6 @@ class Student{
     }
 
     void DisplayStudents() {
-        // cout << "Student Name: .\n" << name << "\n student age: \n"<< age <<
-        // "\n Student Roll Number: \n" << rollNumber <<"\n Student Class: \n"<<endl;
-
         cout << ", Name: " << name << ", Roll Number: " << rollNumber 
              << ", Age: " << age << ", Marks: " <<endl;
     }
@@ -76,11 +73,37 @@ void DeleteStudent(){
     }
     cout << "Student with Roll Number " << deleteStudent.rollNumber << " not found!" << endl;
 }
+// update Students
+void UpdateStudents(){
+    Student updateStudent;
+    cout<<"Enter RollNumber of Student to update: ";
+    cin>>updateStudent.rollNumber;
+
+    for(int i =0; i <students.size(); i++){
+        if(students[i].rollNumber == updateStudent.rollNumber){
+            cout<<"Student Found: "<< students[i].name <<endl;
+
+            cout<<"Eneter a new name: ";
+            cin>>students[i].name;
+            cout<<"Enter New Age";
+            cin>>students[i].age;
+            cout<<"Enter New Class: ";
+            cin>>students[i].Class;
+
+            cout<<"Students Details Updated Succesfully\n";
+            return;
+
+        }
+
+    }
+    cout<<"Students whith Roll Number: "<<updateStudent.rollNumber << " Not Found !"<<endl;
+
+}
 
 int main(){
     int choice;
     while (true){
-    cout<<"\n1. Add Student\n2. Display All students\n3. Delete Students\n4. Exit\n";
+    cout<<"\n1. Add Student\n2. Display All students\n3. Delete Students\n4. Update Students\n5. Exit\n";
     cout<<"Enter a Choice";
     cin>>choice;
     if(choice == 1){
@@ -89,6 +112,8 @@ int main(){
         displayAllStudents();
     }else if(choice == 3){
         DeleteStudent();
+    }else if(choice ==4){
+        UpdateStudents();
     }else{
         cout<<"Invalid Choice ! Try Again\n";
     }
