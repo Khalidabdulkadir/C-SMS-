@@ -92,9 +92,7 @@ void UpdateStudents(){
 
             cout<<"Students Details Updated Succesfully\n";
             return;
-
         }
-
     }
     cout<<"Students whith Roll Number: "<<updateStudent.rollNumber << " Not Found !"<<endl;
 
@@ -114,7 +112,11 @@ int main(){
         DeleteStudent();
     }else if(choice ==4){
         UpdateStudents();
-    }else{
+    }else if(choice == 5)
+    {
+        return 0;
+    }
+    else{
         cout<<"Invalid Choice ! Try Again\n";
     }
     }
