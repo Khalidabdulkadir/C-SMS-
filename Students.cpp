@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 #include <vector>
+#include <fstream>
 
 class Student{
     public:
@@ -99,7 +100,37 @@ void UpdateStudents(){
 
 }
 
+// Save to file
+void SafeToFile(){
+    Student Safetofile;
+    ofstream file("Students.txt");
+    for(int i =0; i<students.size(); i++){
+        file<< Safetofile.name << ""
+        << Safetofile.age<< ""
+        << Safetofile.rollNumber <<""
+        << Safetofile.Class << endl;
+    }
+    file.close();
+    cout<<"Students Saved succesfully!\n";
+}
+void LoadFromFile(){
+    ifstream file("Students.txt");
+    if(!file){
+        cout<<"There is No previous students records foud\n";
+        return ;
+    }
+
+    Student student;
+    while (file >>student.name >> student.age >> student.rollNumber >> student.Class)
+    {
+        /* code */
+        students.push_back(student);
+    }
+    file.close();
+    cout<<"students loaded successfully!\n";
+}
 int main(){
+    LoadFromFile();
     int choice;
     while (true){
     cout<<"\n1. Add Student\n2. Display All students\n3. Delete Students\n4. Update Students\n5. Exit\n";
@@ -115,6 +146,7 @@ int main(){
         UpdateStudents();
     }else if(choice == 5)
     {
+        SafeToFile();
         return 0;
     }
     else{
