@@ -1,157 +1,171 @@
 #include <iostream>
-using namespace std;
 #include <vector>
 #include <fstream>
 
-class Student{
-    public:
+using namespace std;
+
+class Student {
+public:
     string name;
     int age;
     int rollNumber;
     int Class;
 
-    void CreateStudent(){
-        cout<<"Enter Student Name"<<endl;
+    void CreateStudent() {
+        cout << "Enter Student Name: ";
         cin.ignore();
         getline(cin, name);
 
-        cout<<"Enter Student Age"<<endl;
-        cin>>age;
+        cout << "Enter Student Age: ";
+        cin >> age;
 
-        cout<<"Enter Student RollNumber"<<endl;
-        cin>>rollNumber;
+        cout << "Enter Student Roll Number: ";
+        cin >> rollNumber;
 
-        cout<<"Enter Student Class"<<endl;
-        cin>>Class;
+        cout << "Enter Student Class: ";
+        cin >> Class;
     }
 
-    void DisplayStudents() {
-        cout << ", Name: " << name << ", Roll Number: " << rollNumber 
-             << ", Age: " << age << ", Marks: " <<endl;
+    void DisplayStudent() const {
+        cout << "Name: " << name << ", Roll Number: " << rollNumber
+             << ", Age: " << age << ", Class: " << Class << endl;
     }
 };
 
-// golobal variables
 vector<Student> students;
 
-void addStudent(){
+void addStudent() {
     Student newStudent;
     newStudent.CreateStudent();
     students.push_back(newStudent);
 }
 
-// Display Students
-void displayAllStudents(){
-    if(students.empty()){
+void displayAllStudents() {
+    if (students.empty()) {
         cout << "No students stored!" << endl;
         return;
     }
-    for (Student student : students) {
-        student.DisplayStudents();
+    for (const Student& student : students) {
+        student.DisplayStudent();
     }
 }
 
-// Delete Students
-void DeleteStudent(){
-    Student deleteStudent;
+void DeleteStudent() {
+    int rollNumber;
     cout << "Enter Roll Number of Student to Delete: ";
-    cin >> deleteStudent.rollNumber;
-    for(int i =0; i < students.size(); i++){
-        if(students[i].rollNumber == deleteStudent.rollNumber){
-            cout<<"Deleting Student: "<<students[i].name <<endl;
-            // Ask for confirmation
+    cin >> rollNumber;
+
+    for (size_t i = 0; i < students.size(); i++) {
+        if (students[i].rollNumber == rollNumber) {
+            cout << "Deleting Student: " << students[i].name << endl;
+            
             char confirm;
-            cout<<"are you sure you want to delete the user !"<<endl;
-            cin>>confirm;
-            if(confirm = "y" || "Y" ){
+            cout << "Are you sure you want to delete this student? (y/n): ";
+            cin >> confirm;
+            
+            if (confirm == 'y' || confirm == 'Y') {
                 students.erase(students.begin() + i);
-                cout<<"Student Deleted Succesfully!\n";
-            }else{
-                cout<<"deletion cancelled. \n";
+                cout << "Student Deleted Successfully!\n";
+            } else {
+                cout << "Deletion Cancelled.\n";
             }
-            return ;
-        }
-    }
-    cout << "Student with Roll Number " << deleteStudent.rollNumber << " not found!" << endl;
-}
-
-// update Students
-void UpdateStudents(){
-    Student updateStudent;
-    cout<<"Enter RollNumber of Student to update: ";
-    cin>>updateStudent.rollNumber;
-
-    for(int i =0; i <students.size(); i++){
-        if(students[i].rollNumber == updateStudent.rollNumber){
-            cout<<"Student Found: "<< students[i].name <<endl;
-
-            cout<<"Eneter a new name: ";
-            cin>>students[i].name;
-            cout<<"Enter New Age";
-            cin>>students[i].age;
-            cout<<"Enter New Class: ";
-            cin>>students[i].Class;
-
-            cout<<"Students Details Updated Succesfully\n";
             return;
         }
     }
-    cout<<"Students whith Roll Number: "<<updateStudent.rollNumber << " Not Found !"<<endl;
-
+    cout << "Student with Roll Number " << rollNumber << " not found!" << endl;
 }
 
-// Save to file
-void SafeToFile(){
-    Student Safetofile;
-    ofstream file("Students.txt");
-    for(int i =0; i<students.size(); i++){
-        file<< Safetofile.name << ""
-        << Safetofile.age<< ""
-        << Safetofile.rollNumber <<""
-        << Safetofile.Class << endl;
+void UpdateStudent() {
+    int rollNumber;
+    cout << "Enter Roll Number of Student to Update: ";
+    cin >> rollNumber;
+
+    for (Student& student : students) {
+        if (student.rollNumber == rollNumber) {
+            cout << "Student Found: " << student.name << endl;
+
+            cout << "Enter New Name: ";
+            cin.ignore();
+            getline(cin, student.name);
+            
+            cout << "Enter New Age: ";
+            cin >> student.age;
+            
+            cout << "Enter New Class: ";
+            cin >> student.Class;
+
+            cout << "Student Details Updated Successfully!\n";
+            return;
+        }
+    }
+    cout << "Student with Roll Number " << rollNumber << " not found!" << endl;
+}
+
+// search by name 
+void searchByName(){
+    string searchname;
+    cout<<"Enter Student name to search: ";
+    cin.ignore();
+    getline(cin, searchname);
+
+    bool found = false;
+    for(const Student& student : students){
+        if(student.name == searchname){
+            student.DisplayStudent();
+            found = true;
+
+        }
+    }
+    if(!found){
+        cout << "Student with name '" << searchname << "' not found!\n";
+    }
+}
+
+void SaveToFile() {
+    ofstream file("students.txt");
+    if (!file) {
+        cout << "Error saving students!" << endl;
+        return;
+    }
+
+    for (const Student& student : students) {
+        file << student.name << " " << student.age << " " << student.rollNumber << " " << student.Class << endl;
     }
     file.close();
-    cout<<"Students Saved succesfully!\n";
+    cout << "Students saved successfully!\n";
 }
-void LoadFromFile(){
-    ifstream file("Students.txt");
-    if(!file){
-        cout<<"There is No previous students records foud\n";
-        return ;
+
+void LoadFromFile() {
+    ifstream file("students.txt");
+    if (!file) {
+        cout << "No previous student records found.\n";
+        return;
     }
 
     Student student;
-    while (file >>student.name >> student.age >> student.rollNumber >> student.Class)
-    {
-        /* code */
+    while (file >> student.name >> student.age >> student.rollNumber >> student.Class) {
         students.push_back(student);
     }
     file.close();
-    cout<<"students loaded successfully!\n";
+    cout << "Students loaded successfully!\n";
 }
-int main(){
+
+int main() {
     LoadFromFile();
     int choice;
-    while (true){
-    cout<<"\n1. Add Student\n2. Display All students\n3. Delete Students\n4. Update Students\n5. Exit\n";
-    cout<<"Enter a Choice";
-    cin>>choice;
-    if(choice == 1){
-        addStudent();
-    }else if(choice == 2){
-        displayAllStudents();
-    }else if(choice == 3){
-        DeleteStudent();
-    }else if(choice ==4){
-        UpdateStudents();
-    }else if(choice == 5)
-    {
-        SafeToFile();
-        return 0;
+    while (true) {
+        cout << "\n1. Add Student\n2. Display All Students\n3. Delete Student\n4. Update Student\n5. search Student by name\n6. Save and Exit\n";
+        cout << "Enter a Choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: addStudent(); break;
+            case 2: displayAllStudents(); break;
+            case 3: DeleteStudent(); break;
+            case 4: UpdateStudent(); break;
+            case 5: searchByName(); break;
+            case 6: SaveToFile(); return 0;
+            default: cout << "Invalid Choice! Try Again.\n";
+        }
     }
-    else{
-        cout<<"Invalid Choice ! Try Again\n";
-    }
-    }
-    return 0;
 }
