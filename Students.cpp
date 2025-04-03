@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-
 using namespace std;
 
 class Student {
@@ -36,8 +35,29 @@ vector<Student> students;
 
 void addStudent() {
     Student newStudent;
-    newStudent.CreateStudent();
-    students.push_back(newStudent);
+    bool rollNumberExists = false;
+    while (true){
+        newStudent.CreateStudent();
+        
+        for(int i = 0; i<students.size(); i++){
+            if(newStudent.rollNumber == students[i].rollNumber){
+                rollNumberExists = true;
+                cout<<"The RollNumber You Entered already Exists: "<<endl;
+                break;
+            }
+    }
+
+    if(!rollNumberExists){
+        students.push_back(newStudent);
+        cout<<"Student added succesfully: "<<endl;
+        break;
+    }else{
+        rollNumberExists = false;
+        
+    }
+
+    }
+
 }
 
 void displayAllStudents() {
